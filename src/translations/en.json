@@ -1,0 +1,180 @@
+{
+    "nav": {
+        "home": "Home",
+        "shop": "Shop",
+        "about": "About",
+        "contact": "Contact"
+    },
+    "home": {
+        "hero": {
+            "title": "Share the Joy.\nCreate Lasting Memories",
+            "subtitle": "Looking for the perfect gift? You’ve just found it",
+            "scroll": "Scroll to explore"
+        },
+        "gender": {
+            "title": "I'm Picking a Gift For..."
+        },
+        "discover": {
+            "title": "Find the Perfect Gift",
+            "subtitle": "Explore our curated collection of premium gifts for every occasion. Make every moment memorable.",
+            "cta": "Discover Now"
+        },
+        "slider": {
+            "title": "Most Loved Gifts",
+            "drag": "Drag to explore"
+        }
+    },
+    "contact": {
+        "title": "Get in Touch",
+        "subtitle": "We'd love to hear from you",
+        "visit": "Visit Us",
+        "call": "Call Us",
+        "email": "Email Us",
+        "form": {
+            "name": "Name",
+            "email": "Email",
+            "subject": "Subject",
+            "message": "Message",
+            "placeholders": {
+                "name": "Your name",
+                "email": "your@email.com",
+                "subject": "How can we help?",
+                "message": "Tell us more..."
+            },
+            "submit": "Send Message",
+            "success": "Thank you for your message! We'll get back to you soon."
+        }
+    },
+    "about": {
+        "title": "About Regalo",
+        "subtitle": "Where Every Gift Tells a Story",
+        "story": {
+            "title": "Our Story",
+            "p1": "We believe that gift-giving is an art, a way to express love, gratitude, and appreciation for the special people in our lives. Yet, we noticed that many people get lost in the same predictable choices — chocolates, flowers, or perfume — no matter the occasion. Finding something truly fitting can be a challenge.",
+            "p2": "Regalo was created to change that. Drawing inspiration from the Spanish spirit of giving, where gifts are more than objects and reflect care, thoughtfulness, and connection, we curate a variety of unique gifts tailored to every moment.",
+            "p3": "The name Regalo reflects the joy of sharing, the warmth of relationships, and the simple, profound act of making someone feel truly special. With Regalo, the right gift comes to you, thoughtfully matched to your needs and the occasion you’re celebrating."
+        },
+        "values": {
+            "quality": {
+                "title": "Quality",
+                "desc": "We source only premium products from trusted artisans and brands worldwide."
+            },
+            "curation": {
+                "title": "Curation",
+                "desc": "Every item is hand-picked by our experts to ensure it meets our high standards."
+            },
+            "experience": {
+                "title": "Experience",
+                "desc": "From browsing to unboxing, we craft a seamless and delightful journey."
+            }
+        },
+        "stats": {
+            "customers": "Happy Customers",
+            "products": "Unique Products",
+            "satisfaction": "Satisfaction Rate"
+        }
+    },
+    "product": {
+        "back": "Back to Shop",
+        "notFound": "Product Not Found",
+        "quantity": "Quantity:",
+        "addToCart": "Add to Cart",
+        "buyNow": "Buy Now"
+    },
+    "shop": {
+        "title": "Explore Occasions",
+        "subtitle": "Find the perfect gift for every moment",
+        "filters": {
+            "all": "All",
+            "forHim": "For Him",
+            "forHer": "For Her"
+        },
+        "exploreGifts": "Explore Gifts",
+        "stackLabel": "Occasions",
+        "selectOccasion": "Select an Occasion",
+        "browseAll": "All Occasions",
+        "browseOccasions": "Browse Occasions"
+    },
+    "occasions": {
+        "wedding": {
+            "name": "Wedding",
+            "description": "For the perfect union",
+            "descriptionHim": "For the dashing groom",
+            "descriptionHer": "For the radiant bride"
+        },
+        "birthday": {
+            "name": "Birthday",
+            "description": "Celebrate another year of life",
+            "descriptionHim": "Make his day legendary",
+            "descriptionHer": "Make her day magical"
+        },
+        "new-baby": {
+            "name": "New Baby",
+            "description": "Welcome the little one",
+            "descriptionHim": "For the proud new dad",
+            "descriptionHer": "For the glowing new mom"
+        },
+        "romantic": {
+            "name": "Romantic",
+            "description": "Express your love",
+            "descriptionHim": "Sweep him off his feet",
+            "descriptionHer": "Make her heart flutter"
+        },
+        "new-house": {
+            "name": "New House",
+            "description": "Warm their new home",
+            "descriptionHim": "For the man of the house",
+            "descriptionHer": "For the queen of her castle"
+        },
+        "retirement": {
+            "name": "Retirement",
+            "description": "Celebrate their new chapter",
+            "descriptionHim": "Honor his legendary career",
+            "descriptionHer": "Celebrate her achievements"
+        },
+        "office": {
+            "name": "Office",
+            "description": "Professional gifts",
+            "descriptionHim": "For the sharp professional",
+            "descriptionHer": "For the boss lady"
+        },
+        "inauguration": {
+            "name": "Inauguration",
+            "description": "Mark the milestone",
+            "descriptionHim": "Celebrate his grand opening",
+            "descriptionHer": "Celebrate her new venture"
+        },
+        "graduation": {
+            "name": "Graduation",
+            "description": "Honor their achievement",
+            "descriptionHim": "For the accomplished graduate",
+            "descriptionHer": "For the brilliant graduate"
+        },
+        "other": {
+            "name": "Other",
+            "description": "Browse all gifts",
+            "descriptionHim": "Find something for him",
+            "descriptionHer": "Find something for her"
+        }
+    },
+    "footer": {
+        "desc": "Discover the perfect gifts for your loved ones. Premium quality, unforgettable moments.",
+        "quickLinks": "Quick Links",
+        "categories": "Categories",
+        "contactInfo": "Contact Info",
+        "rights": "All rights reserved.",
+        "address": "123 Gift Street, New York, NY 10001",
+        "cat": {
+            "him": "Gifts for Him",
+            "her": "Gifts for Her",
+            "kids": "Kids",
+            "luxury": "Luxury"
+        }
+    },
+    "languages": {
+        "en": "English",
+        "fr": "Français",
+        "ar": "Arabic",
+        "es": "Español"
+    }
+}

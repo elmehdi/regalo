@@ -1,0 +1,180 @@
+{
+    "nav": {
+        "home": "Inicio",
+        "shop": "Tienda",
+        "about": "Nosotros",
+        "contact": "Contacto"
+    },
+    "home": {
+        "hero": {
+            "title": "Comparte la alegría.\nCrea recuerdos duraderos",
+            "subtitle": "¿Buscas el regalo perfecto? Lo acabas de encontrar",
+            "scroll": "Desliza para explorar"
+        },
+        "gender": {
+            "title": "Estoy buscando un regalo para..."
+        },
+        "discover": {
+            "title": "Encuentra el regalo perfecto",
+            "subtitle": "Explora nuestra selección de regalos premium para cada ocasión. Haz que cada momento sea memorable.",
+            "cta": "Descubrir ahora"
+        },
+        "slider": {
+            "title": "Los regalos más queridos",
+            "drag": "Arrastra para explorar"
+        }
+    },
+    "contact": {
+        "title": "Ponte en contacto",
+        "subtitle": "Nos encantaría saber de ti",
+        "visit": "Visítanos",
+        "call": "Llámanos",
+        "email": "Envíenos un correo electrónico",
+        "form": {
+            "name": "Nombre",
+            "email": "Correo electrónico",
+            "subject": "Asunto",
+            "message": "Mensaje",
+            "placeholders": {
+                "name": "Tu nombre",
+                "email": "tu@email.com",
+                "subject": "¿Cómo podemos ayudarte?",
+                "message": "Cuéntanos más..."
+            },
+            "submit": "Enviar mensaje",
+            "success": "¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto."
+        }
+    },
+    "about": {
+        "title": "Sobre Regalo",
+        "subtitle": "Donde cada regalo cuenta una historia",
+        "story": {
+            "title": "Nuestra historia",
+            "p1": "Creemos que dar regalos es un arte, una forma de expresar amor, gratitud y aprecio por las personas especiales en nuestras vidas. Sin embargo, notamos que mucha gente se pierde en las mismas opciones predecibles — chocolates, flores o perfumes — sin importar la ocasión. Encontrar algo realmente adecuado puede ser un desafío.",
+            "p2": "Regalo fue creado para cambiar eso. Inspirándonos en el espíritu español del dar, donde los regalos son más que objetos y reflejan cuidado, consideración y conexión, seleccionamos una variedad de regalos únicos adaptados a cada momento.",
+            "p3": "El nombre Regalo refleja la alegría de compartir, la calidez de las relaciones y el acto simple y profundo de hacer que alguien se sienta realmente especial. Con Regalo, el regalo adecuado llega a ti, cuidadosamente adaptado a tus necesidades y a la ocasión que estés celebrando."
+        },
+        "values": {
+            "quality": {
+                "title": "Calidad",
+                "desc": "Obtenemos solo productos premium de artesanos y marcas de confianza en todo el mundo."
+            },
+            "curation": {
+                "title": "Selección",
+                "desc": "Cada artículo es seleccionado a mano por nuestros expertos para asegurar que cumpla con nuestros altos estándares."
+            },
+            "experience": {
+                "title": "Experiencia",
+                "desc": "Desde la navegación hasta el desembalaje, creamos un viaje fluido y encantador."
+            }
+        },
+        "stats": {
+            "customers": "Clientes felices",
+            "products": "Productos únicos",
+            "satisfaction": "Tasa de satisfacción"
+        }
+    },
+    "product": {
+        "back": "Volver a la tienda",
+        "notFound": "Producto no encontrado",
+        "quantity": "Cantidad:",
+        "addToCart": "Añadir al carrito",
+        "buyNow": "Comprar ahora"
+    },
+    "shop": {
+        "title": "Explora las ocasiones",
+        "subtitle": "Encuentra el regalo perfecto para cada momento",
+        "filters": {
+            "all": "Todos",
+            "forHim": "Para él",
+            "forHer": "Para ella"
+        },
+        "exploreGifts": "Explorar regalos",
+        "stackLabel": "Ocasiones",
+        "selectOccasion": "Seleccionar una Ocasión",
+        "browseAll": "Todas las Ocasiones",
+        "browseOccasions": "Explorar Ocasiones"
+    },
+    "occasions": {
+        "wedding": {
+            "name": "Boda",
+            "description": "Por la unión perfecta",
+            "descriptionHim": "Para el novio elegante",
+            "descriptionHer": "Para la novia radiante"
+        },
+        "birthday": {
+            "name": "Cumpleaños",
+            "description": "Celebra otro año de vida",
+            "descriptionHim": "Haz que su día sea legendario",
+            "descriptionHer": "Haz que su día sea mágico"
+        },
+        "new-baby": {
+            "name": "Recién nacido",
+            "description": "Bienvenido al pequeño",
+            "descriptionHim": "Para el orgulloso nuevo papá",
+            "descriptionHer": "Para la radiante nueva mamá"
+        },
+        "romantic": {
+            "name": "Romántico",
+            "description": "Expresa tu amor",
+            "descriptionHim": "Sorpréndelo",
+            "descriptionHer": "Haz que su corazón palpite"
+        },
+        "new-house": {
+            "name": "Nueva casa",
+            "description": "Dale calidez a su nuevo hogar",
+            "descriptionHim": "Para el hombre de la casa",
+            "descriptionHer": "Para la reina de su castillo"
+        },
+        "retirement": {
+            "name": "Jubilación",
+            "description": "Celebra su nuevo capítulo",
+            "descriptionHim": "Honra su legendaria carrera",
+            "descriptionHer": "Celebra sus logros"
+        },
+        "office": {
+            "name": "Oficina",
+            "description": "Regalos profesionales",
+            "descriptionHim": "Para el profesional distinguido",
+            "descriptionHer": "Para la jefa"
+        },
+        "inauguration": {
+            "name": "Inauguración",
+            "description": "Marca el hito",
+            "descriptionHim": "Celebra su gran apertura",
+            "descriptionHer": "Celebra su nuevo emprendimiento"
+        },
+        "graduation": {
+            "name": "Graduación",
+            "description": "Honra su logro",
+            "descriptionHim": "Para el graduado consumado",
+            "descriptionHer": "Para la graduada brillante"
+        },
+        "other": {
+            "name": "Otros",
+            "description": "Ver todos los regalos",
+            "descriptionHim": "Encuentra algo para él",
+            "descriptionHer": "Encuentra algo para ella"
+        }
+    },
+    "footer": {
+        "desc": "Descubre los regalos perfectos para tus seres queridos. Calidad premium, momentos inolvidables.",
+        "quickLinks": "Enlaces rápidos",
+        "categories": "Categorías",
+        "contactInfo": "Información de contacto",
+        "rights": "Todos los derechos reservados.",
+        "address": "123 Gift Street, Nueva York, NY 10001",
+        "cat": {
+            "him": "Regalos para él",
+            "her": "Regalos para ella",
+            "kids": "Niños",
+            "luxury": "Lujo"
+        }
+    },
+    "languages": {
+        "en": "English",
+        "fr": "Français",
+        "ar": "العربية",
+        "es": "Español"
+    }
+}

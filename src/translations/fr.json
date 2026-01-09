@@ -1,0 +1,180 @@
+{
+    "nav": {
+        "home": "Accueil",
+        "shop": "Boutique",
+        "about": "À propos",
+        "contact": "Contact"
+    },
+    "home": {
+        "hero": {
+            "title": "Partagez la Joie.\nCréez des Souvenirs",
+            "subtitle": "À la recherche du cadeau parfait ? Vous venez de le trouver",
+            "scroll": "Défilez pour explorer"
+        },
+        "slider": {
+            "title": "Cadeaux les plus aimés",
+            "drag": "Glissez pour explorer"
+        },
+        "gender": {
+            "title": "Je cherche un cadeau pour..."
+        },
+        "discover": {
+            "title": "Trouvez le Cadeau Parfait",
+            "subtitle": "Explorez notre collection de cadeaux premium pour chaque occasion. Rendez chaque moment mémorable.",
+            "cta": "Découvrir Maintenant"
+        }
+    },
+    "contact": {
+        "title": "Contactez-nous",
+        "subtitle": "Nous aimerions avoir de vos nouvelles",
+        "visit": "Rendez-nous visite",
+        "call": "Appelez-nous",
+        "email": "Envoyez-nous un email",
+        "form": {
+            "name": "Nom",
+            "email": "Email",
+            "subject": "Sujet",
+            "message": "Message",
+            "placeholders": {
+                "name": "Votre nom",
+                "email": "votre@email.com",
+                "subject": "Comment pouvons-nous aider ?",
+                "message": "Dites-nous en plus..."
+            },
+            "submit": "Envoyer le message",
+            "success": "Merci pour votre message ! Nous vous répondrons bientôt."
+        }
+    },
+    "about": {
+        "title": "À propos de Regalo",
+        "subtitle": "Où chaque cadeau raconte une histoire",
+        "story": {
+            "title": "Notre Histoire",
+            "p1": "Nous croyons que l'art d'offrir est un art, une façon d'exprimer l'amour, la gratitude et l'appréciation pour les personnes spéciales dans nos vies. Pourtant, nous avons remarqué que beaucoup de gens se perdent dans les mêmes choix prévisibles — chocolats, fleurs ou parfum — quelle que soit l'occasion. Trouver quelque chose de vraiment adapté peut être un défi.",
+            "p2": "Regalo a été créé pour changer cela. En s'inspirant de l'esprit espagnol du don, où les cadeaux sont plus que des objets et reflètent l'attention, la délicatesse et le lien, nous sélectionnons une variété de cadeaux uniques adaptés à chaque instant.",
+            "p3": "Le nom Regalo reflète la joie du partage, la chaleur des relations et l'acte simple mais profond de faire en sorte que quelqu'un se sente vraiment spécial. Avec Regalo, le bon cadeau vient à vous, judicieusement adapté à vos besoins et à l'occasion que vous célébrez."
+        },
+        "values": {
+            "quality": {
+                "title": "Qualité",
+                "desc": "Nous ne sourçons que des produits premium d'artisans et marques de confiance."
+            },
+            "curation": {
+                "title": "Sélection",
+                "desc": "Chaque article est choisi à la main par nos experts pour garantir nos standards élevés."
+            },
+            "experience": {
+                "title": "Expérience",
+                "desc": "De la navigation au déballage, nous créons un parcours fluide et délicieux."
+            }
+        },
+        "stats": {
+            "customers": "Clients Heureux",
+            "products": "Produits Uniques",
+            "satisfaction": "Taux de Satisfaction"
+        }
+    },
+    "product": {
+        "back": "Retour à la boutique",
+        "notFound": "Produit non trouvé",
+        "quantity": "Quantité :",
+        "addToCart": "Ajouter au panier",
+        "buyNow": "Acheter maintenant"
+    },
+    "shop": {
+        "title": "Explorez les Occasions",
+        "subtitle": "Trouvez le cadeau parfait pour chaque moment",
+        "filters": {
+            "all": "Tous",
+            "forHim": "Pour Lui",
+            "forHer": "Pour Elle"
+        },
+        "exploreGifts": "Découvrir",
+        "stackLabel": "Occasions",
+        "selectOccasion": "Sélectionner une Occasion",
+        "browseAll": "Toutes les Occasions",
+        "browseOccasions": "Parcourir les Occasions"
+    },
+    "occasions": {
+        "wedding": {
+            "name": "Mariage",
+            "description": "Pour l'union parfaite",
+            "descriptionHim": "Pour le marié élégant",
+            "descriptionHer": "Pour la mariée radieuse"
+        },
+        "birthday": {
+            "name": "Anniversaire",
+            "description": "Célébrez une nouvelle année de vie",
+            "descriptionHim": "Rendez sa journée légendaire",
+            "descriptionHer": "Rendez sa journée magique"
+        },
+        "new-baby": {
+            "name": "Nouveau-né",
+            "description": "Accueillez le petit ange",
+            "descriptionHim": "Pour le nouveau papa fier",
+            "descriptionHer": "Pour la nouvelle maman rayonnante"
+        },
+        "romantic": {
+            "name": "Romantique",
+            "description": "Exprimez votre amour",
+            "descriptionHim": "Faites-le fondre",
+            "descriptionHer": "Faites battre son cœur"
+        },
+        "new-house": {
+            "name": "Nouvelle Maison",
+            "description": "Réchauffez leur nouveau foyer",
+            "descriptionHim": "Pour le maître de maison",
+            "descriptionHer": "Pour la reine du foyer"
+        },
+        "retirement": {
+            "name": "Retraite",
+            "description": "Célébrez leur nouveau chapitre",
+            "descriptionHim": "Honorez sa carrière légendaire",
+            "descriptionHer": "Célébrez ses accomplissements"
+        },
+        "office": {
+            "name": "Bureau",
+            "description": "Cadeaux professionnels",
+            "descriptionHim": "Pour le professionnel distingué",
+            "descriptionHer": "Pour la femme d'affaires"
+        },
+        "inauguration": {
+            "name": "Inauguration",
+            "description": "Marquez l'étape importante",
+            "descriptionHim": "Célébrez son ouverture",
+            "descriptionHer": "Célébrez sa nouvelle aventure"
+        },
+        "graduation": {
+            "name": "Diplôme",
+            "description": "Honorez leur réussite",
+            "descriptionHim": "Pour le diplômé accompli",
+            "descriptionHer": "Pour la diplômée brillante"
+        },
+        "other": {
+            "name": "Autres",
+            "description": "Parcourez tous les cadeaux",
+            "descriptionHim": "Trouvez quelque chose pour lui",
+            "descriptionHer": "Trouvez quelque chose pour elle"
+        }
+    },
+    "footer": {
+        "desc": "Découvrez les cadeaux parfaits pour vos proches. Qualité premium, moments inoubliables.",
+        "quickLinks": "Liens Rapides",
+        "categories": "Catégories",
+        "contactInfo": "Infos Contact",
+        "rights": "Tous droits réservés.",
+        "address": "123 Rue des Cadeaux, New York, NY 10001",
+        "cat": {
+            "him": "Cadeaux pour Lui",
+            "her": "Cadeaux pour Elle",
+            "kids": "Enfants",
+            "luxury": "Luxe"
+        }
+    },
+    "languages": {
+        "en": "English",
+        "fr": "Français",
+        "ar": "Arabe",
+        "es": "Español"
+    }
+}

@@ -1,0 +1,235 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.navbar.scrolled {
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 15px 50px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 40px;
+}
+
+.nav-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 400;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--primary-color);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-icons {
+  display: flex;
+  gap: 20px;
+}
+
+/* Nav Right Container */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Language Toggle */
+.language-toggle {
+  position: relative;
+  transform: scale(1.2);
+  /* Enlarged the entire toggle component */
+  transform-origin: right center;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 25px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary-color);
+}
+
+.lang-flag {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.lang-arrow {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.3s ease;
+}
+
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: rgba(26, 26, 46, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 100px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lang-option.active {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--primary-color);
+}
+
+.lang-option .lang-flag {
+  width: 20px;
+  height: 20px;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 2px;
+  background: var(--text-light);
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 25px;
+  }
+
+  .navbar.scrolled {
+    padding: 12px 25px;
+  }
+
+  .nav-links {
+    display: none !important;
+  }
+
+  .nav-icons {
+    display: none;
+  }
+
+  .language-toggle {
+    transform: scale(1) !important;
+    margin-right: 0;
+    transform-origin: center;
+  }
+
+  .nav-right {
+    gap: 15px;
+    margin-right: 0;
+  }
+
+  .hamburger {
+    display: none !important;
+  }
+
+  .logo {
+    font-size: 1.4rem;
+  }
+}

@@ -1,0 +1,53 @@
+/* ===== CSS Variables ===== */
+:root {
+  --primary-color: #c9a86c;
+  --secondary-color: #1a1a2e;
+  --accent-color: #e8d5b5;
+  --text-light: #ffffff;
+  --text-muted: #a0a0a0;
+  --gradient-gold: linear-gradient(135deg, #c9a86c 0%, #e8d5b5 50%, #c9a86c 100%);
+}
+
+/* ===== Reset & Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--secondary-color);
+  color: var(--text-light);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ===== Scrollbar Styling ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Mobile Layout Adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding-bottom: 80px;
+  }
+}

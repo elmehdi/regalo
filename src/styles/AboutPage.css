@@ -1,0 +1,149 @@
+.about-page {
+  min-height: 100vh;
+  background: var(--secondary-color);
+}
+
+.about-hero {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 26, 46, 0.8),
+    var(--secondary-color)
+  ),
+  url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=1920') center/cover;
+}
+
+.about-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 8vw, 5rem);
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+}
+
+.about-hero p {
+  font-size: 1.3rem;
+  color: var(--text-muted);
+}
+
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.about-section {
+  margin-bottom: 80px;
+}
+
+.about-text {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 30px;
+}
+
+.about-text p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.value-card {
+  background: linear-gradient(145deg, rgba(30, 30, 53, 0.9), rgba(20, 20, 40, 0.95));
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  border: 1px solid rgba(201, 168, 108, 0.1);
+  transition: all 0.3s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(201, 168, 108, 0.3);
+}
+
+.value-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.value-card p {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 60px 0;
+  border-top: 1px solid rgba(201, 168, 108, 0.2);
+  border-bottom: 1px solid rgba(201, 168, 108, 0.2);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .about-hero {
+    height: 50vh;
+    padding: 0 20px;
+  }
+
+  .about-content {
+    padding: 40px 20px;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .stats-section {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+}

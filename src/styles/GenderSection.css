@@ -1,0 +1,258 @@
+.gender-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.section-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+  z-index: 30;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
+}
+
+.gender-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.gender-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 100vh;
+}
+
+.gender-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.gender-card:hover .gender-bg {
+  transform: scale(1.05);
+}
+
+.gender-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom,
+      rgba(26, 26, 46, 0.2) 0%,
+      rgba(26, 26, 46, 0.6) 100%);
+  transition: background 0.3s ease;
+}
+
+.gender-card:hover .gender-overlay {
+  background: linear-gradient(to bottom,
+      rgba(26, 26, 46, 0.1) 0%,
+      rgba(26, 26, 46, 0.4) 100%);
+}
+
+.parallax-images {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.parallax-img {
+  position: absolute;
+  bottom: 0;
+  height: 90%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  object-position: bottom;
+  transition: transform 0.2s ease-out;
+}
+
+/* Male side - man on left, boy on right */
+.man-img {
+  left: 0;
+  transform: translateX(-15%);
+  z-index: 2;
+}
+
+.boy-img {
+  right: 0;
+  transform: translateX(25%);
+  z-index: 1;
+  height: 55%;
+}
+
+/* Female side - woman on right, girl on left */
+.woman-img {
+  right: 0;
+  transform: translateX(15%);
+  z-index: 2;
+}
+
+.girl-img {
+  left: 0;
+  transform: translateX(-15%);
+  z-index: 1;
+  height: 55%;
+}
+
+.gender-content {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 20;
+}
+
+.gender-btn {
+  padding: 15px 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.3s ease, background 0.3s ease;
+  position: relative;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.gender-btn:hover {
+  color: var(--secondary-color);
+  background: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .gender-section {
+    min-height: auto;
+    padding: 0;
+    background: #0f0f1a;
+    margin: 0;
+    /* Strict reset */
+    z-index: 20;
+    position: relative;
+  }
+
+  .section-title {
+    position: relative;
+    padding: 30px 20px 10px;
+    margin: 0;
+    font-size: 1.5rem;
+    text-align: center;
+    width: 100%;
+    z-index: 30;
+    background: #0f0f1a;
+  }
+
+  .gender-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    /* NO space between cards */
+    min-height: auto;
+    margin-top: 0;
+    /* No offset needed anymore */
+  }
+
+  .gender-card {
+    min-height: 480px;
+    border-radius: 0;
+    /* Flush edges */
+    background: #0f0f1a;
+  }
+
+  .parallax-images {
+    bottom: 80px;
+    /* Push images up slightly */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  .parallax-img {
+    height: 380px !important;
+    /* Larger images */
+    margin: 0 -20px;
+    /* Overlap them slightly for depth but keep them clear */
+  }
+
+  .man-img,
+  .woman-img {
+    z-index: 2;
+  }
+
+  .boy-img,
+  .girl-img {
+    height: 280px !important;
+    z-index: 1;
+  }
+
+  .gender-content {
+    bottom: 25px;
+    /* Position button at the very bottom */
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .gender-btn {
+    width: 100%;
+    /* Full width mobile buttons look more premium here */
+    max-width: 250px;
+    padding: 14px 0;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+.gender-btn:hover,
+.gender-btn:active {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+@media (max-width: 480px) {
+  .gender-section {
+    padding: 0;
+  }
+
+  .section-title {
+    font-size: 1.35rem;
+    padding: 30px 15px 15px;
+  }
+
+  .gender-card {
+    min-height: 380px;
+  }
+
+  /* Resetting image spacing for flush layout */
+  .parallax-img {
+    height: 300px !important;
+  }
+}

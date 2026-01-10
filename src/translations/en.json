@@ -12,7 +12,8 @@
             "scroll": "Scroll to explore"
         },
         "gender": {
-            "title": "I'm Picking a Gift For..."
+            "title": "I'm Picking a Gift For...",
+            "subtitle": "Choose a collection to start your search"
         },
         "discover": {
             "title": "Find the Perfect Gift",
@@ -87,7 +88,9 @@
         "filters": {
             "all": "All",
             "forHim": "For Him",
-            "forHer": "For Her"
+            "forHer": "For Her",
+            "shopBy": "Collection",
+            "shopNow": "Shop now"
         },
         "exploreGifts": "Explore Gifts",
         "stackLabel": "Occasions",
@@ -176,5 +179,32 @@
         "fr": "Français",
         "ar": "Arabic",
         "es": "Español"
+    },
+    "category": {
+        "backToShop": "Back to Shop",
+        "products": "Products",
+        "avgRating": "Avg Rating",
+        "reviews": "Reviews",
+        "filters": "Filters",
+        "sortBy": "Sort By",
+        "priceRange": "Price Range",
+        "applyFilters": "Apply Filters",
+        "sort": {
+            "featured": "Featured",
+            "priceLow": "Price: Low to High",
+            "priceHigh": "Price: High to Low",
+            "rating": "Top Rated",
+            "popular": "Most Popular"
+        },
+        "price": {
+            "all": "All Prices",
+            "under100": "Under 100 MAD",
+            "over300": "300+ MAD"
+        },
+        "quickView": "Quick View",
+        "noProducts": "No products found",
+        "noProductsDesc": "Try adjusting your filters to find what you're looking for",
+        "clearFilters": "Clear Filters",
+        "relatedOccasions": "Explore More Occasions"
     }
 }

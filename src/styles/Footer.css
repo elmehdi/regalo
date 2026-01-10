@@ -1,4 +1,6 @@
 .footer {
+  position: relative;
+  z-index: 1;
   background: #0f0f1a;
   padding: 80px 50px 30px;
 }

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { useCart } from '../context/CartContext'
+import { useFavorites } from '../context/FavoritesContext'
 import '../styles/Navbar.css'
 
 const languages = [
@@ -16,7 +18,11 @@ function Navbar() {
   const [isLangOpen, setIsLangOpen] = useState(false)
   const location = useLocation()
   const { language, setLanguage, t } = useLanguage()
+  const { getCartCount } = useCart()
+  const { getFavoritesCount } = useFavorites()
 
+  const cartCount = getCartCount()
+  const favoritesCount = getFavoritesCount()
   const currentLang = languages.find(l => l.code === language) || languages[0]
 
   useEffect(() => {
@@ -57,6 +63,29 @@ function Navbar() {
       </ul>
 
       <div className="nav-right">
+        {/* Favorites Icon */}
+        <Link to="/favorites" className="nav-icon-btn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+          {favoritesCount > 0 && (
+            <span className="nav-badge">{favoritesCount > 99 ? '99+' : favoritesCount}</span>
+          )}
+        </Link>
+
+        {/* Cart Icon */}
+        <Link to="/cart" className="nav-icon-btn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M6 6h15l-1.5 9h-13z" />
+            <circle cx="9" cy="20" r="1" />
+            <circle cx="18" cy="20" r="1" />
+            <path d="M6 6L5 3H2" />
+          </svg>
+          {cartCount > 0 && (
+            <span className="nav-badge">{cartCount > 99 ? '99+' : cartCount}</span>
+          )}
+        </Link>
+
         {/* Language Toggle */}
         <div className="language-toggle">
           <button

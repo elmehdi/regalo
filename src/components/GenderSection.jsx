@@ -1,91 +1,59 @@
-import { useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import '../styles/GenderSection.css'
 
 function GenderSection() {
   const { t } = useLanguage()
-  const maleCardRef = useRef(null)
-  const femaleCardRef = useRef(null)
 
-  const handleMouseMove = useCallback((e, cardRef) => {
-    const card = cardRef.current
-    if (!card) return
-
-    const rect = card.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
-
-    const moveX = (x - centerX) / centerX
-    const moveY = (y - centerY) / centerY
-
-    const images = card.querySelectorAll('.parallax-img')
-    images.forEach((img, index) => {
-      const speed = (index + 1) * 8
-      const isLeftImage = img.classList.contains('man-img') || img.classList.contains('girl-img')
-      const isBoy = img.classList.contains('boy-img')
-      let baseX = isLeftImage ? '-15%' : '15%'
-      if (isBoy) baseX = '25%'
-      const horizontalMove = moveX * speed * 0.3
-      img.style.transform = `translateX(calc(${baseX} + ${horizontalMove}px)) translateY(${moveY * speed}px)`
-    })
-  }, [])
-
-  const handleMouseLeave = useCallback((cardRef) => {
-    const card = cardRef.current
-    if (!card) return
-
-    const images = card.querySelectorAll('.parallax-img')
-    images.forEach(img => {
-      const isLeftImage = img.classList.contains('man-img') || img.classList.contains('girl-img')
-      const isBoy = img.classList.contains('boy-img')
-      let baseX = isLeftImage ? '-15%' : '15%'
-      if (isBoy) baseX = '25%'
-      img.style.transform = `translateX(${baseX})`
-    })
-  }, [])
+  // Keep this data-driven so adding Kids later is a one-liner.
+  const cards = [
+    {
+      key: 'him',
+      title: t('shop.filters.forHim'),
+      to: '/shop?category=him',
+      bg: "/assets/male bg.png",
+      foreground: "/assets/man.png",
+    },
+    {
+      key: 'her',
+      title: t('shop.filters.forHer'),
+      to: '/shop?category=her',
+      bg: "/assets/woman bg.png",
+      foreground: "/assets/Woaman.png",
+    },
+  ]
 
   return (
-    <section className="gender-section" id="genderSection">
-      <h2 className="section-title">{t('home.gender.title')}</h2>
-      <div className="gender-grid">
-        {/* Male Side */}
-        <div
-          className="gender-card male-card"
-          ref={maleCardRef}
-          onMouseMove={(e) => handleMouseMove(e, maleCardRef)}
-          onMouseLeave={() => handleMouseLeave(maleCardRef)}
-        >
-          <div className="gender-bg" style={{ backgroundImage: "url('/assets/male bg.png')" }}></div>
-          <div className="gender-overlay"></div>
-          <div className="parallax-images">
-            <img src="/assets/man.png" alt="Man" className="parallax-img man-img" />
-            <img src="/assets/little boy.png" alt="Little Boy" className="parallax-img boy-img" />
-          </div>
-          <div className="gender-content">
-            <Link to="/shop?category=him" className="gender-btn">{t('shop.filters.forHim')}</Link>
-          </div>
-        </div>
+    <section className="gender-section" id="genderSection" aria-label={t('home.gender.title')}>
+      <div className="gender-section__inner">
+        <header className="gender-header">
+          <h2 className="gender-title">{t('home.gender.title')}</h2>
+          <p className="gender-subtitle">{t('home.gender.subtitle') || t('shop.filters.forHim') + ' / ' + t('shop.filters.forHer')}</p>
+        </header>
 
-        {/* Female Side */}
-        <div
-          className="gender-card female-card"
-          ref={femaleCardRef}
-          onMouseMove={(e) => handleMouseMove(e, femaleCardRef)}
-          onMouseLeave={() => handleMouseLeave(femaleCardRef)}
-        >
-          <div className="gender-bg" style={{ backgroundImage: "url('/assets/woman bg.png')" }}></div>
-          <div className="gender-overlay"></div>
-          <div className="parallax-images">
-            <img src="/assets/Woaman.png" alt="Woman" className="parallax-img woman-img" />
-            <img src="/assets/little girl.png" alt="Little Girl" className="parallax-img girl-img" />
-          </div>
-          <div className="gender-content">
-            <Link to="/shop?category=her" className="gender-btn">{t('shop.filters.forHer')}</Link>
-          </div>
+        <div className="gender-grid" role="list">
+          {cards.map((card) => (
+            <Link
+              key={card.key}
+              to={card.to}
+              className={`gender-card gender-card--${card.key}`}
+              role="listitem"
+              aria-label={card.title}
+            >
+              <div className="gender-card__bg" style={{ backgroundImage: `url('${card.bg}')` }} />
+              <div className="gender-card__overlay" />
+              <div className="gender-card__content">
+                <span className="gender-card__eyebrow">{t('shop.filters.shopBy') || 'Collection'}</span>
+                <h3 className="gender-card__title">{card.title}</h3>
+                <span className="gender-card__cta">{t('shop.filters.shopNow') || 'Shop now'}
+                  <span className="gender-card__arrow" aria-hidden="true">→</span>
+                </span>
+              </div>
+
+              {/* Decorative foreground (keeps your vibe, but without the loud fullscreen/parallax look) */}
+              <img className="gender-card__fg" src={card.foreground} alt="" loading="lazy" />
+            </Link>
+          ))}
         </div>
       </div>
     </section>

@@ -96,6 +96,9 @@ function ShopPage() {
 
   return (
     <div className={`shop-page ${getThemeClass()}`}>
+      {/* Decorative grain overlay (must not block clicks) */}
+      <div className="shop-grain" aria-hidden="true" />
+
       {/* Blurred background using current occasion image */}
       <div
         className="shop-bg-blur"

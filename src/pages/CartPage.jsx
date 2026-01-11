@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useLanguage } from '../context/LanguageContext'
 import '../styles/CartPage.css'
@@ -6,10 +6,17 @@ import '../styles/CartPage.css'
 function CartPage() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart()
   const { t } = useLanguage()
+  const navigate = useNavigate()
 
   if (cartItems.length === 0) {
     return (
       <div className="cart-page empty">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>Back</span>
+        </button>
         <div className="empty-cart">
           <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M6 6h15l-1.5 9h-13z" />
@@ -28,6 +35,12 @@ function CartPage() {
   return (
     <div className="cart-page">
       <div className="cart-container">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>Back</span>
+        </button>
         <div className="cart-header">
           <h1>Shopping Cart</h1>
           <button onClick={clearCart} className="clear-cart">Clear All</button>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { Link, useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useCart } from '../context/CartContext'
@@ -7,53 +7,53 @@ import '../styles/CategoryPage.css'
 
 // Occasion configurations with theme colors
 const occasionConfig = {
-  'wedding': { 
-    accent: '#D4AF37', 
+  'wedding': {
+    accent: '#D4AF37',
     gradient: 'linear-gradient(135deg, #D4AF37 0%, #F5E6A3 50%, #D4AF37 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #2a2535 50%, #1a1a2e 100%)'
   },
-  'birthday': { 
-    accent: '#FF6B6B', 
+  'birthday': {
+    accent: '#FF6B6B',
     gradient: 'linear-gradient(135deg, #FF6B6B 0%, #FFE66D 50%, #FF6B6B 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #2e1f2a 50%, #1a1a2e 100%)'
   },
-  'new-baby': { 
-    accent: '#81ECEC', 
+  'new-baby': {
+    accent: '#81ECEC',
     gradient: 'linear-gradient(135deg, #81ECEC 0%, #DFE6E9 50%, #81ECEC 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #1f2e2e 50%, #1a1a2e 100%)'
   },
-  'romantic': { 
-    accent: '#E84393', 
+  'romantic': {
+    accent: '#E84393',
     gradient: 'linear-gradient(135deg, #E84393 0%, #FD79A8 50%, #E84393 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #2e1a2a 50%, #1a1a2e 100%)'
   },
-  'new-house': { 
-    accent: '#00B894', 
+  'new-house': {
+    accent: '#00B894',
     gradient: 'linear-gradient(135deg, #00B894 0%, #55EFC4 50%, #00B894 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #1a2e25 50%, #1a1a2e 100%)'
   },
-  'retirement': { 
-    accent: '#6C5CE7', 
+  'retirement': {
+    accent: '#6C5CE7',
     gradient: 'linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #6C5CE7 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #251a2e 50%, #1a1a2e 100%)'
   },
-  'office': { 
-    accent: '#0984E3', 
+  'office': {
+    accent: '#0984E3',
     gradient: 'linear-gradient(135deg, #0984E3 0%, #74B9FF 50%, #0984E3 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #1a252e 50%, #1a1a2e 100%)'
   },
-  'inauguration': { 
-    accent: '#FDCB6E', 
+  'inauguration': {
+    accent: '#FDCB6E',
     gradient: 'linear-gradient(135deg, #FDCB6E 0%, #FFEAA7 50%, #FDCB6E 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #2e2a1a 50%, #1a1a2e 100%)'
   },
-  'graduation': { 
-    accent: '#00CEC9', 
+  'graduation': {
+    accent: '#00CEC9',
     gradient: 'linear-gradient(135deg, #00CEC9 0%, #81ECEC 50%, #00CEC9 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #1a2e2e 50%, #1a1a2e 100%)'
   },
-  'other': { 
-    accent: '#D4AF37', 
+  'other': {
+    accent: '#D4AF37',
     gradient: 'linear-gradient(135deg, #D4AF37 0%, #F5E6A3 50%, #D4AF37 100%)',
     bgGradient: 'linear-gradient(180deg, #1a1a2e 0%, #2a2535 50%, #1a1a2e 100%)'
   },
@@ -160,40 +160,44 @@ function CategoryPage() {
   const { occasionId } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
-  
+
   const [sortBy, setSortBy] = useState('featured')
   const [priceRange, setPriceRange] = useState('all')
   const [viewMode, setViewMode] = useState('grid')
   const [isLoading, setIsLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
+  const [forKids, setForKids] = useState(false)
   
+  // Carousel state
+  const [carouselIndex, setCarouselIndex] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState(0)
+  const [dragOffset, setDragOffset] = useState(0)
+  const carouselRef = useRef(null)
+  const autoPlayRef = useRef(null)
+
   const activeCategory = searchParams.get('category') || 'all'
   const config = occasionConfig[occasionId] || occasionConfig['other']
   const products = allProducts[occasionId] || allProducts['other']
 
-  useEffect(() => {
-    setIsLoading(true)
-    const timer = setTimeout(() => setIsLoading(false), 600)
-    return () => clearTimeout(timer)
-  }, [occasionId, activeCategory])
-
-  // Filter products
+  // Filter products - MUST be defined before hooks that use it
   const filteredProducts = useMemo(() => {
     let result = [...products]
-    
+
     // Filter by gender
     if (activeCategory === 'him') {
       result = result.filter(p => p.forHim)
     } else if (activeCategory === 'her') {
       result = result.filter(p => p.forHer)
     }
-    
+
     // Filter by price
     if (priceRange !== 'all') {
       const [min, max] = priceRange.split('-').map(Number)
       result = result.filter(p => p.price >= min && (max ? p.price <= max : true))
     }
-    
+
     // Sort
     switch (sortBy) {
       case 'price-low':
@@ -212,9 +216,89 @@ function CategoryPage() {
         // Featured - keep original order
         break
     }
-    
+
     return result
   }, [products, activeCategory, priceRange, sortBy])
+
+  useEffect(() => {
+    setIsLoading(true)
+    const timer = setTimeout(() => setIsLoading(false), 600)
+    return () => clearTimeout(timer)
+  }, [occasionId, activeCategory])
+
+  // Carousel auto-play
+  useEffect(() => {
+    if (viewMode === 'carousel' && isAutoPlaying && filteredProducts.length > 0) {
+      autoPlayRef.current = setInterval(() => {
+        setCarouselIndex(prev => (prev + 1) % filteredProducts.length)
+      }, 4000)
+    }
+    return () => {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current)
+      }
+    }
+  }, [viewMode, isAutoPlaying, filteredProducts.length])
+
+  // Reset carousel index when products change
+  useEffect(() => {
+    setCarouselIndex(0)
+  }, [occasionId, activeCategory, priceRange])
+
+  // Carousel navigation
+  const goToSlide = useCallback((index) => {
+    setCarouselIndex(index)
+    setIsAutoPlaying(false)
+    setTimeout(() => setIsAutoPlaying(true), 10000)
+  }, [])
+
+  const nextSlide = useCallback(() => {
+    goToSlide((carouselIndex + 1) % filteredProducts.length)
+  }, [carouselIndex, filteredProducts.length, goToSlide])
+
+  const prevSlide = useCallback(() => {
+    goToSlide((carouselIndex - 1 + filteredProducts.length) % filteredProducts.length)
+  }, [carouselIndex, filteredProducts.length, goToSlide])
+
+  // Drag/Swipe handlers
+  const handleDragStart = (e) => {
+    setIsDragging(true)
+    setIsAutoPlaying(false)
+    const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX
+    setDragStart(clientX)
+  }
+
+  const handleDragMove = (e) => {
+    if (!isDragging) return
+    const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX
+    setDragOffset(clientX - dragStart)
+  }
+
+  const handleDragEnd = () => {
+    if (!isDragging) return
+    setIsDragging(false)
+    
+    const threshold = 80
+    if (dragOffset > threshold) {
+      prevSlide()
+    } else if (dragOffset < -threshold) {
+      nextSlide()
+    }
+    
+    setDragOffset(0)
+    setTimeout(() => setIsAutoPlaying(true), 5000)
+  }
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (viewMode !== 'carousel') return
+      if (e.key === 'ArrowLeft') prevSlide()
+      if (e.key === 'ArrowRight') nextSlide()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [viewMode, prevSlide, nextSlide])
 
   const handleCategoryChange = (category) => {
     if (category === 'all') {
@@ -233,9 +317,9 @@ function CategoryPage() {
   const isRTL = language === 'ar'
 
   return (
-    <div 
+    <div
       className={`category-page ${getThemeClass()}`}
-      style={{ 
+      style={{
         '--accent-color': config.accent,
         '--accent-gradient': config.gradient,
         background: config.bgGradient
@@ -256,17 +340,17 @@ function CategoryPage() {
             <span className="back-arrow">{isRTL ? '→' : '←'}</span>
             <span>{t('category.backToShop')}</span>
           </Link>
-          
+
           <h1 className="hero-title">{t(`occasions.${occasionId}.name`)}</h1>
           <p className="hero-subtitle">
-            {activeCategory === 'him' 
+            {activeCategory === 'him'
               ? t(`occasions.${occasionId}.descriptionHim`)
               : activeCategory === 'her'
-              ? t(`occasions.${occasionId}.descriptionHer`)
-              : t(`occasions.${occasionId}.description`)
+                ? t(`occasions.${occasionId}.descriptionHer`)
+                : t(`occasions.${occasionId}.description`)
             }
           </p>
-          
+
           <div className="hero-stats">
             <div className="stat">
               <span className="stat-number">{filteredProducts.length}</span>
@@ -284,10 +368,10 @@ function CategoryPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="hero-image-container">
-          <img 
-            src={`/assets/${occasionId === 'new-baby' ? 'new%20born' : occasionId === 'new-house' ? 'new%20house' : occasionId}.png`} 
+          <img
+            src={`/assets/${occasionId === 'new-baby' ? 'new%20born' : occasionId === 'new-house' ? 'new%20house' : occasionId}.png`}
             alt={t(`occasions.${occasionId}.name`)}
             className="hero-image"
           />
@@ -299,13 +383,13 @@ function CategoryPage() {
         {/* Immersive Hero Banner */}
         <div className="mobile-hero-banner">
           <div className="mobile-hero-bg">
-            <img 
-              src={`/assets/${occasionId === 'new-baby' ? 'new%20born' : occasionId === 'new-house' ? 'new%20house' : occasionId}.png`} 
+            <img
+              src={`/assets/${occasionId === 'new-baby' ? 'new%20born' : occasionId === 'new-house' ? 'new%20house' : occasionId}.png`}
               alt=""
             />
             <div className="mobile-hero-overlay" />
           </div>
-          
+
           <div className="mobile-hero-nav">
             <Link to="/shop" className="mobile-nav-btn">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -325,11 +409,11 @@ function CategoryPage() {
               <span>{t(`occasions.${occasionId}.name`)}</span>
             </div>
             <h1 className="mobile-hero-title">
-              {activeCategory === 'him' 
+              {activeCategory === 'him'
                 ? t(`occasions.${occasionId}.descriptionHim`)
                 : activeCategory === 'her'
-                ? t(`occasions.${occasionId}.descriptionHer`)
-                : t(`occasions.${occasionId}.description`)
+                  ? t(`occasions.${occasionId}.descriptionHer`)
+                  : t(`occasions.${occasionId}.description`)
               }
             </h1>
             <div className="mobile-hero-meta">
@@ -364,7 +448,20 @@ function CategoryPage() {
             >
               <span>{t('shop.filters.forHer')}</span>
             </button>
+            <button
+              className={`tab-btn tab-kids ${forKids ? 'active' : ''}`}
+              onClick={() => setForKids(!forKids)}
+              style={forKids ? { background: 'linear-gradient(135deg, #FFD93D, #FF6B6B)', color: '#1a1a2e' } : {}}
+            >
+              <span>{t('shop.filters.kids')}</span>
+            </button>
           </div>
+          {/* Mobile Kids combo indicator */}
+          {forKids && activeCategory !== 'all' && (
+            <div className="mobile-kids-combo">
+              {activeCategory === 'him' ? t('shop.filters.youngBoy') : t('shop.filters.youngGirl')}
+            </div>
+          )}
         </div>
 
         {/* Sort Pills */}
@@ -405,8 +502,8 @@ function CategoryPage() {
             </div>
           ) : (
             filteredProducts.map((product, index) => (
-              <div 
-                key={product.id} 
+              <div
+                key={product.id}
                 className="mobile-premium-card"
                 style={{ '--i': index }}
                 onClick={() => navigate(`/product/${product.id.replace(/[a-z]/g, '')}`)}
@@ -414,14 +511,14 @@ function CategoryPage() {
                 <div className="premium-card-image">
                   <img src={product.image} alt={product.name} />
                   <div className="card-image-overlay" />
-                  
+
                   {product.badge && (
                     <div className={`premium-badge badge-${product.badge.toLowerCase()}`}>
                       {product.badge}
                     </div>
                   )}
-                  
-                  <button 
+
+                  <button
                     className={`premium-wishlist ${isFavorite(product.id) ? 'active' : ''}`}
                     onClick={(e) => {
                       e.stopPropagation()
@@ -439,14 +536,14 @@ function CategoryPage() {
                     <span className="rating-count">({product.reviews})</span>
                   </div>
                 </div>
-                
+
                 <div className="premium-card-content">
                   <div className="card-content-main">
                     <h3 className="premium-card-name">{product.name}</h3>
                     <p className="premium-card-price">{product.price.toFixed(2)} MAD</p>
                   </div>
-                  
-                  <button 
+
+                  <button
                     className={`premium-add-btn ${isInCart(product.id) ? 'in-cart' : ''}`}
                     onClick={(e) => {
                       e.stopPropagation()
@@ -475,13 +572,13 @@ function CategoryPage() {
               .filter(id => id !== occasionId)
               .slice(0, 5)
               .map(id => (
-                <Link 
-                  key={id} 
+                <Link
+                  key={id}
                   to={`/shop/${id}${activeCategory !== 'all' ? `?category=${activeCategory}` : ''}`}
                   className="quick-shop-item"
                 >
                   <div className="quick-shop-image">
-                    <img 
+                    <img
                       src={`/assets/${id === 'new-baby' ? 'new%20born' : id === 'new-house' ? 'new%20house' : id}.png`}
                       alt={t(`occasions.${id}.name`)}
                     />
@@ -501,29 +598,47 @@ function CategoryPage() {
             <button
               className={`gender-btn ${activeCategory === 'all' ? 'active' : ''}`}
               onClick={() => handleCategoryChange('all')}
-              style={activeCategory === 'all' ? { background: 'linear-gradient(135deg, #D4AF37, #F5E6A3)', color: '#1a1a2e', borderColor: '#D4AF37' } : {}}
             >
-              {t('shop.filters.all')}
+              <span className="btn-text">{t('shop.filters.all')}</span>
             </button>
             <button
               className={`gender-btn for-him ${activeCategory === 'him' ? 'active' : ''}`}
               onClick={() => handleCategoryChange('him')}
-              style={activeCategory === 'him' ? { background: 'linear-gradient(135deg, #3b82f6, #60a5fa)', color: '#fff', borderColor: '#3b82f6' } : {}}
             >
-              {t('shop.filters.forHim')}
+              <span className="ribbon ribbon-left"></span>
+              <span className="btn-text">{t('shop.filters.forHim')}</span>
+              <span className="ribbon ribbon-right"></span>
             </button>
             <button
               className={`gender-btn for-her ${activeCategory === 'her' ? 'active' : ''}`}
               onClick={() => handleCategoryChange('her')}
-              style={activeCategory === 'her' ? { background: 'linear-gradient(135deg, #ec4899, #f472b6)', color: '#fff', borderColor: '#ec4899' } : {}}
             >
-              {t('shop.filters.forHer')}
+              <span className="ribbon ribbon-left"></span>
+              <span className="btn-text">{t('shop.filters.forHer')}</span>
+              <span className="ribbon ribbon-right"></span>
+            </button>
+            
+            {/* Kids Toggle */}
+            <button
+              className={`gender-btn for-kids ${forKids ? 'active' : ''}`}
+              onClick={() => setForKids(!forKids)}
+            >
+              <span className="ribbon ribbon-left"></span>
+              <span className="btn-text">{t('shop.filters.kids')}</span>
+              <span className="ribbon ribbon-right"></span>
             </button>
           </div>
+          
+          {/* Kids combination indicator */}
+          {forKids && activeCategory !== 'all' && (
+            <div className="kids-combo-label">
+              {activeCategory === 'him' ? t('shop.filters.youngBoy') : t('shop.filters.youngGirl')}
+            </div>
+          )}
         </div>
 
         <div className="filters-right">
-          <button 
+          <button
             className="filter-toggle-btn"
             onClick={() => setShowFilters(!showFilters)}
           >
@@ -538,9 +653,10 @@ function CategoryPage() {
           </button>
 
           <div className="view-toggle">
-            <button 
+            <button
               className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
               onClick={() => setViewMode('grid')}
+              title="Grid View"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -549,14 +665,15 @@ function CategoryPage() {
                 <rect x="14" y="14" width="7" height="7" rx="1" />
               </svg>
             </button>
-            <button 
-              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-              onClick={() => setViewMode('list')}
+            <button
+              className={`view-btn ${viewMode === 'carousel' ? 'active' : ''}`}
+              onClick={() => setViewMode('carousel')}
+              title="Carousel View"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="3" y="4" width="18" height="4" rx="1" />
-                <rect x="3" y="10" width="18" height="4" rx="1" />
-                <rect x="3" y="16" width="18" height="4" rx="1" />
+                <rect x="2" y="6" width="5" height="12" rx="1" opacity="0.4"/>
+                <rect x="9" y="4" width="6" height="16" rx="1.5"/>
+                <rect x="17" y="6" width="5" height="12" rx="1" opacity="0.4"/>
               </svg>
             </button>
           </div>
@@ -611,64 +728,252 @@ function CategoryPage() {
               {t('category.clearFilters')}
             </button>
           </div>
+        ) : viewMode === 'carousel' ? (
+          /* ==================== CAROUSEL VIEW ==================== */
+          <div className="carousel-container">
+            {/* Carousel Background Glow */}
+            <div className="carousel-glow" style={{ '--glow-color': config.accent }} />
+            
+            {/* Main Carousel */}
+            <div 
+              className="carousel-wrapper"
+              ref={carouselRef}
+              onMouseDown={handleDragStart}
+              onMouseMove={handleDragMove}
+              onMouseUp={handleDragEnd}
+              onMouseLeave={handleDragEnd}
+              onTouchStart={handleDragStart}
+              onTouchMove={handleDragMove}
+              onTouchEnd={handleDragEnd}
+            >
+              <div className="carousel-track" style={{ 
+                transform: `translateX(calc(-${carouselIndex * 100}% + ${dragOffset}px))`,
+                transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'
+              }}>
+                {filteredProducts.map((product, index) => {
+                  const offset = index - carouselIndex
+                  const isActive = index === carouselIndex
+                  const isPrev = offset === -1 || (carouselIndex === 0 && index === filteredProducts.length - 1)
+                  const isNext = offset === 1 || (carouselIndex === filteredProducts.length - 1 && index === 0)
+                  
+                  return (
+                    <div 
+                      key={product.id}
+                      className={`carousel-slide ${isActive ? 'active' : ''} ${isPrev ? 'prev' : ''} ${isNext ? 'next' : ''}`}
+                      style={{
+                        '--slide-offset': offset,
+                        '--accent': config.accent
+                      }}
+                    >
+                      <div 
+                        className="carousel-card"
+                        onClick={() => isActive && navigate(`/product/${product.id.replace(/[a-z]/g, '')}`)}
+                      >
+                        {/* Card Image Section */}
+                        <div className="carousel-card-image">
+                          <img src={product.image} alt={product.name} />
+                          <div className="carousel-card-overlay" />
+                          
+                          {product.badge && (
+                            <span className={`carousel-badge badge-${product.badge.toLowerCase()}`}>
+                              {product.badge}
+                            </span>
+                          )}
+                          
+                          <button
+                            className={`carousel-wishlist ${isFavorite(product.id) ? 'active' : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleFavorite(product)
+                            }}
+                          >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill={isFavorite(product.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                          </button>
+                        </div>
+                        
+                        {/* Card Content Section */}
+                        <div className="carousel-card-content">
+                          <div className="carousel-card-rating">
+                            <span className="rating-stars">
+                              {[...Array(5)].map((_, i) => (
+                                <span key={i} className={i < Math.floor(product.rating) ? 'filled' : ''}>★</span>
+                              ))}
+                            </span>
+                            <span className="rating-value">{product.rating}</span>
+                            <span className="rating-reviews">({product.reviews} reviews)</span>
+                          </div>
+                          
+                          <h3 className="carousel-card-name">{product.name}</h3>
+                          
+                          <div className="carousel-card-footer">
+                            <span className="carousel-card-price">{product.price.toFixed(2)} MAD</span>
+                            <button
+                              className={`carousel-add-btn ${isInCart(product.id) ? 'in-cart' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                addToCart(product)
+                              }}
+                            >
+                              {isInCart(product.id) ? (
+                                <>
+                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <path d="M5 13l4 4L19 7" />
+                                  </svg>
+                                  <span>Added</span>
+                                </>
+                              ) : (
+                                <>
+                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M6 6h15l-1.5 9h-13z" />
+                                    <circle cx="9" cy="20" r="1" />
+                                    <circle cx="18" cy="20" r="1" />
+                                  </svg>
+                                  <span>Add to Cart</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                        
+                        {/* View Details Hint */}
+                        {isActive && (
+                          <div className="carousel-view-hint">
+                            <span>Click to view details</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            
+            {/* Navigation Arrows */}
+            <button className="carousel-nav carousel-nav-prev" onClick={prevSlide}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </button>
+            <button className="carousel-nav carousel-nav-next" onClick={nextSlide}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+            
+            {/* Dot Indicators */}
+            <div className="carousel-dots">
+              {filteredProducts.map((_, index) => (
+                <button
+                  key={index}
+                  className={`carousel-dot ${index === carouselIndex ? 'active' : ''}`}
+                  onClick={() => goToSlide(index)}
+                >
+                  <span className="dot-progress" style={{ 
+                    animationDuration: '4s',
+                    animationPlayState: index === carouselIndex && isAutoPlaying ? 'running' : 'paused'
+                  }} />
+                </button>
+              ))}
+            </div>
+            
+            {/* Product Counter */}
+            <div className="carousel-counter">
+              <span className="current">{String(carouselIndex + 1).padStart(2, '0')}</span>
+              <span className="separator">/</span>
+              <span className="total">{String(filteredProducts.length).padStart(2, '0')}</span>
+            </div>
+            
+            {/* Thumbnail Preview Strip */}
+            <div className="carousel-thumbnails">
+              {filteredProducts.slice(
+                Math.max(0, carouselIndex - 2),
+                Math.min(filteredProducts.length, carouselIndex + 3)
+              ).map((product, i) => {
+                const actualIndex = Math.max(0, carouselIndex - 2) + i
+                return (
+                  <button
+                    key={product.id}
+                    className={`thumbnail ${actualIndex === carouselIndex ? 'active' : ''}`}
+                    onClick={() => goToSlide(actualIndex)}
+                  >
+                    <img src={product.image} alt={product.name} />
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         ) : (
           <>
             {/* Desktop Grid */}
             <div className={`products-grid desktop-grid ${viewMode}`}>
               {filteredProducts.map((product, index) => (
-                <div 
-                  key={product.id} 
+                <div
+                  key={product.id}
                   className="product-card"
                   style={{ '--card-index': index }}
                   onClick={() => navigate(`/product/${product.id.replace(/[a-z]/g, '')}`)}
                 >
-                  {product.badge && (
-                    <span className={`product-badge badge-${product.badge.toLowerCase()}`}>
-                      {product.badge}
-                    </span>
-                  )}
-                  
-                  <div className="product-image-wrapper">
+                  <div className="product-inner">
+                    {product.badge && (
+                      <span className={`product-badge badge-${product.badge.toLowerCase()}`}>
+                        {product.badge}
+                      </span>
+                    )}
+
+                    <button
+                      className={`desktop-wishlist ${isFavorite(product.id) ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleFavorite(product)
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill={isFavorite(product.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
+                    </button>
+
                     <img src={product.image} alt={product.name} className="product-image" />
-                    <div className="product-overlay">
-                      <button className="quick-view-btn">{t('category.quickView')}</button>
-                    </div>
-                  </div>
 
-                  <div className="product-info">
-                    <h3 className="product-name">{product.name}</h3>
-                    
-                    <div className="product-rating">
-                      <div className="stars">
-                        {[...Array(5)].map((_, i) => (
-                          <span key={i} className={`star ${i < Math.floor(product.rating) ? 'filled' : ''}`}>★</span>
-                        ))}
+                    <div className="product-info">
+                      <h3 className="product-name">{product.name}</h3>
+
+                      <div className="product-rating">
+                        <div className="stars">
+                          {[...Array(5)].map((_, i) => (
+                            <span key={i} className={`star ${i < Math.floor(product.rating) ? 'filled' : ''}`}>★</span>
+                          ))}
+                        </div>
+                        <span className="rating-text">{product.rating} ({product.reviews})</span>
                       </div>
-                      <span className="rating-text">{product.rating} ({product.reviews})</span>
-                    </div>
 
-                    <div className="product-price-row">
-                      <span className="product-price">{product.price.toFixed(2)} MAD</span>
-                      <button 
-                        className={`add-to-cart ${isInCart(product.id) ? 'in-cart' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          addToCart(product)
-                        }}
-                      >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          {isInCart(product.id) ? (
-                            <path d="M5 13l4 4L19 7" />
-                          ) : (
-                            <>
-                              <path d="M6 6h15l-1.5 9h-13z" />
-                              <circle cx="9" cy="20" r="1" />
-                              <circle cx="18" cy="20" r="1" />
-                              <path d="M6 6L5 3H2" />
-                            </>
-                          )}
-                        </svg>
-                      </button>
+                      <div className="product-price-row">
+                        <span className="product-price">{product.price.toFixed(2)} MAD</span>
+                        <button
+                          className={`add-to-cart ${isInCart(product.id) ? 'in-cart' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            addToCart(product)
+                          }}
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            {isInCart(product.id) ? (
+                              <path d="M5 13l4 4L19 7" />
+                            ) : (
+                              <>
+                                <path d="M6 6h15l-1.5 9h-13z" />
+                                <circle cx="9" cy="20" r="1" />
+                                <circle cx="18" cy="20" r="1" />
+                                <path d="M6 6L5 3H2" />
+                              </>
+                            )}
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -686,13 +991,13 @@ function CategoryPage() {
             .filter(id => id !== occasionId)
             .slice(0, 4)
             .map(id => (
-              <Link 
-                key={id} 
+              <Link
+                key={id}
                 to={`/shop/${id}${activeCategory !== 'all' ? `?category=${activeCategory}` : ''}`}
                 className="related-occasion-card"
               >
                 <div className="related-image">
-                  <img 
+                  <img
                     src={`/assets/${id === 'new-baby' ? 'new%20born' : id === 'new-house' ? 'new%20house' : id}.png`}
                     alt={t(`occasions.${id}.name`)}
                   />

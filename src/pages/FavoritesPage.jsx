@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useFavorites } from '../context/FavoritesContext'
 import { useCart } from '../context/CartContext'
 import { useLanguage } from '../context/LanguageContext'
@@ -8,10 +8,17 @@ function FavoritesPage() {
   const { favorites, toggleFavorite } = useFavorites()
   const { addToCart, isInCart } = useCart()
   const { t } = useLanguage()
+  const navigate = useNavigate()
 
   if (favorites.length === 0) {
     return (
       <div className="favorites-page empty">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>Back</span>
+        </button>
         <div className="empty-favorites">
           <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -27,6 +34,12 @@ function FavoritesPage() {
   return (
     <div className="favorites-page">
       <div className="favorites-container">
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>Back</span>
+        </button>
         <h1>My Favorites</h1>
         
         <div className="favorites-grid">

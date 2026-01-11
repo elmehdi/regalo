@@ -4,6 +4,37 @@
   padding: 100px 20px 80px;
 }
 
+/* Back Button */
+.favorites-page .back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.favorites-page .back-button:hover {
+  background: rgba(232, 67, 147, 0.2);
+  border-color: #E84393;
+  color: #fff;
+  transform: translateX(-5px);
+}
+
+.favorites-page .back-button svg {
+  transition: transform 0.3s ease;
+}
+
+.favorites-page .back-button:hover svg {
+  transform: translateX(-4px);
+}
+
 .favorites-container {
   max-width: 1400px;
   margin: 0 auto;

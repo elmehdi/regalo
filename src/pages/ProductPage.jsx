@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import '../styles/ProductPage.css'
 
@@ -16,6 +16,7 @@ const products = [
 function ProductPage() {
   const { t } = useLanguage()
   const { id } = useParams()
+  const navigate = useNavigate()
   const product = products.find(p => p.id === parseInt(id))
 
   if (!product) {
@@ -29,6 +30,12 @@ function ProductPage() {
 
   return (
     <div className="product-page">
+      <button className="back-button" onClick={() => navigate(-1)}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Back</span>
+      </button>
       <div className="product-container">
         <div className="product-gallery">
           <img src={product.image} alt={product.name} />

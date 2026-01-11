@@ -70,13 +70,14 @@
   font-family: 'Playfair Display', serif;
   font-size: clamp(2.2rem, 5vw, 4rem);
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.2;
   margin-bottom: 24px;
   background: var(--gradient-gold);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
+  min-width: 400px;
   max-width: 800px;
 }
 

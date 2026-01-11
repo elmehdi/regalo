@@ -73,7 +73,14 @@
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 45px;
+}
+
+/* Icons Group (Cart & Favorites together) */
+.nav-icons-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Nav Icon Buttons (Cart & Favorites) */

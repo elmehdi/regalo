@@ -7,8 +7,8 @@
     },
     "home": {
         "hero": {
-            "title": "Share the Joy.\nCreate Lasting Memories",
-            "subtitle": "Looking for the perfect gift? You’ve just found it",
+            "title": "Share the Joy. Create Lasting Memories",
+            "subtitle": "Looking for the perfect gift? You've just found it",
             "scroll": "Scroll to explore"
         },
         "gender": {
@@ -89,6 +89,9 @@
             "all": "All",
             "forHim": "For Him",
             "forHer": "For Her",
+            "kids": "Kids",
+            "youngBoy": "Young Boy",
+            "youngGirl": "Young Girl",
             "shopBy": "Collection",
             "shopNow": "Shop now"
         },

@@ -54,7 +54,7 @@ function FavoritesPage() {
                 </svg>
               </button>
 
-              <Link to={`/product/${product.id.replace(/[a-z]/g, '')}`} className="favorite-link">
+              <Link to={`/product/${product.id}`} className="favorite-link">
                 <img src={product.image} alt={product.name} />
                 
                 <div className="favorite-info">
@@ -62,11 +62,11 @@ function FavoritesPage() {
                   
                   <div className="favorite-rating">
                     <span className="star">★</span>
-                    <span>{product.rating}</span>
-                    <span className="reviews">({product.reviews})</span>
+                    <span>{product.ratings?.average ?? '-'}</span>
+                    <span className="reviews">({product.ratings?.count ?? 0})</span>
                   </div>
 
-                  <p className="favorite-price">{product.price.toFixed(2)} MAD</p>
+                  <p className="favorite-price">{parseFloat(product.price).toFixed(2)} MAD</p>
                 </div>
               </Link>
 

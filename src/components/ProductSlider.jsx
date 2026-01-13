@@ -1,18 +1,8 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { fetchProducts } from '../services/api'
 import '../styles/ProductSlider.css'
-
-const products = [
-  { id: 1, name: 'Luxury Gift Box', price: 49.99, image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400' },
-  { id: 2, name: 'Classic Watch', price: 129.99, image: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400' },
-  { id: 3, name: 'Premium Perfume', price: 89.99, image: 'https://images.unsplash.com/photo-1583623025817-d180a2221d0a?w=400' },
-  { id: 4, name: 'Designer Bag', price: 199.99, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400' },
-  { id: 5, name: 'Stylish Sunglasses', price: 79.99, image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400' },
-  { id: 6, name: 'Premium Sneakers', price: 159.99, image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400' },
-  { id: 7, name: 'Gold Jewelry Set', price: 249.99, image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400' },
-  { id: 8, name: 'Leather Wallet', price: 59.99, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400' },
-]
 
 function ProductSlider() {
   const { t } = useLanguage()
@@ -21,6 +11,24 @@ function ProductSlider() {
   const [isDragging, setIsDragging] = useState(false)
   const [hasInteracted, setHasInteracted] = useState(false)
   const hasDraggedRef = useRef(false)
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Load products from API
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true)
+        const data = await fetchProducts()
+        setProducts(data)
+      } catch (err) {
+        console.error('Failed to load products:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadProducts()
+  }, [])
 
   const dragState = useRef({
     startX: 0,
@@ -252,7 +260,7 @@ function ProductSlider() {
                 <img src={product.image} alt={product.name} draggable="false" />
                 <div className="product-info">
                   <h3>{product.name}</h3>
-                  <p className="price">${product.price.toFixed(2)}</p>
+                  <p className="price">${parseFloat(product.price).toFixed(2)}</p>
                 </div>
               </div>
             </div>

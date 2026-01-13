@@ -2,6 +2,77 @@
   background: var(--secondary-color);
   padding: 120px 20px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient background */
+.discover-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(201, 168, 108, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(201, 168, 108, 0.1) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.discover-section.visible::before {
+  opacity: 1;
+}
+
+/* Floating particles */
+.discover-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.discover-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.discover-section.visible .discover-particle {
+  animation: discoverFloat 6s ease-in-out infinite;
+}
+
+.discover-particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+.discover-particle:nth-child(2) { left: 25%; top: 70%; animation-delay: 0.5s; }
+.discover-particle:nth-child(3) { left: 40%; top: 30%; animation-delay: 1s; }
+.discover-particle:nth-child(4) { left: 60%; top: 80%; animation-delay: 1.5s; }
+.discover-particle:nth-child(5) { left: 75%; top: 25%; animation-delay: 2s; }
+.discover-particle:nth-child(6) { left: 90%; top: 60%; animation-delay: 2.5s; }
+.discover-particle:nth-child(7) { left: 15%; top: 85%; animation-delay: 3s; }
+.discover-particle:nth-child(8) { left: 85%; top: 15%; animation-delay: 3.5s; }
+
+@keyframes discoverFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  20% {
+    opacity: 0.6;
+    transform: translateY(-10px) scale(1);
+  }
+  80% {
+    opacity: 0.6;
+    transform: translateY(-30px) scale(1);
+  }
+}
+
+.discover-content {
+  position: relative;
+  z-index: 1;
 }
 
 .discover-content h2 {
@@ -12,6 +83,14 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.discover-section.visible .discover-content h2 {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .discover-content p {
@@ -19,10 +98,20 @@
   font-size: 1.1rem;
   max-width: 600px;
   margin: 0 auto 40px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+.discover-section.visible .discover-content p {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .discover-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   padding: 18px 60px;
   font-size: 1rem;
   font-weight: 500;
@@ -32,10 +121,30 @@
   background: var(--gradient-gold);
   color: var(--secondary-color);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   position: relative;
   overflow: hidden;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.discover-section.visible .discover-btn {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.4s;
+}
+
+.btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-icon {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
 }
 
 .discover-btn::before {
@@ -54,8 +163,14 @@
 }
 
 .discover-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(201, 168, 108, 0.3);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    0 15px 40px rgba(201, 168, 108, 0.3),
+    0 0 60px rgba(201, 168, 108, 0.2);
+}
+
+.discover-btn:hover .btn-icon {
+  transform: translateX(5px);
 }
 
 /* Mobile */

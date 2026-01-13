@@ -54,7 +54,7 @@ function CartPage() {
                 
                 <div className="cart-item-info">
                   <h3>{item.name}</h3>
-                  <p className="cart-item-price">{item.price.toFixed(2)} MAD</p>
+                  <p className="cart-item-price">{parseFloat(item.price).toFixed(2)} MAD</p>
                 </div>
 
                 <div className="cart-item-actions">
@@ -64,7 +64,7 @@ function CartPage() {
                     <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                   </div>
                   
-                  <p className="cart-item-total">{(item.price * item.quantity).toFixed(2)} MAD</p>
+                  <p className="cart-item-total">{(parseFloat(item.price) * item.quantity).toFixed(2)} MAD</p>
                   
                   <button 
                     onClick={() => removeFromCart(item.id)} 

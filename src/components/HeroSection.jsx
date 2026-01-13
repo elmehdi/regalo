@@ -16,6 +16,14 @@ function HeroSection() {
         />
       </picture>
       <div className="hero-overlay"></div>
+      
+      {/* Floating Particles */}
+      <div className="hero-particles">
+        {[...Array(15)].map((_, i) => (
+          <span key={i} className="particle"></span>
+        ))}
+      </div>
+      
       <div className="hero-content">
         <h1 className="hero-title">{t('home.hero.title')}</h1>
         <p className="hero-subtitle">{t('home.hero.subtitle')}</p>

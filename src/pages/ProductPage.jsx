@@ -1,25 +1,48 @@
+import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { fetchProductById } from '../services/api'
 import '../styles/ProductPage.css'
-
-const products = [
-  { id: 1, name: 'Luxury Gift Box', price: 49.99, image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800', description: 'A beautifully crafted luxury gift box perfect for any special occasion. Includes premium packaging and customization options.' },
-  { id: 2, name: 'Classic Watch', price: 129.99, image: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=800', description: 'Timeless elegance meets modern craftsmanship. This classic watch features a genuine leather strap and Swiss movement.' },
-  { id: 3, name: 'Premium Perfume', price: 89.99, image: 'https://images.unsplash.com/photo-1583623025817-d180a2221d0a?w=800', description: 'An exquisite fragrance with notes of jasmine, sandalwood, and vanilla. Long-lasting and perfect for evening wear.' },
-  { id: 4, name: 'Designer Bag', price: 199.99, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800', description: 'Handcrafted from premium Italian leather. Spacious interior with multiple compartments for everyday luxury.' },
-  { id: 5, name: 'Stylish Sunglasses', price: 79.99, image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800', description: 'UV400 protection with polarized lenses. Lightweight titanium frame for all-day comfort.' },
-  { id: 6, name: 'Premium Sneakers', price: 159.99, image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800', description: 'Premium materials meet cutting-edge design. Memory foam insole for ultimate comfort.' },
-  { id: 7, name: 'Gold Jewelry Set', price: 249.99, image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800', description: '18K gold-plated jewelry set including necklace, bracelet, and earrings. Perfect for gifting.' },
-  { id: 8, name: 'Leather Wallet', price: 59.99, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800', description: 'Full-grain leather wallet with RFID blocking technology. Slim design with multiple card slots.' },
-]
+import FavoriteIcon from '../components/FavoriteIcon'
 
 function ProductPage() {
   const { t } = useLanguage()
   const { id } = useParams()
   const navigate = useNavigate()
-  const product = products.find(p => p.id === parseInt(id))
+  const [product, setProduct] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  if (!product) {
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await fetchProductById(id)
+        setProduct(data)
+      } catch (err) {
+        setError('Failed to load product')
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadProduct()
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="product-page loading">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Loading product...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !product) {
     return (
       <div className="product-page not-found">
         <h1>{t('product.notFound')}</h1>
@@ -32,32 +55,132 @@ function ProductPage() {
     <div className="product-page">
       <button className="back-button" onClick={() => navigate(-1)}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
+          <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
         <span>Back</span>
       </button>
       <div className="product-container">
         <div className="product-gallery">
+          {/* Heart Icon for Favorites */}
+          <FavoriteIcon product={product} />
           <img src={product.image} alt={product.name} />
+
+          {/* Gender & Kids Badges */}
+          <div className="product-badges">
+            <span className={`gender-badge gender-${product.gender}`}>
+              {product.gender === 'both' ? 'Both' : product.gender === 'man' ? 'For Him' : 'For Her'}
+            </span>
+            {product.kids && <span className="kids-badge">Kids Friendly</span>}
+          </div>
+
+          {/* Desktop: Ratings & Reviews under image */}
+          <div className="gallery-details">
+            {/* Collapsible Ratings Breakdown */}
+            <details className="rating-details">
+              <summary>View Rating Breakdown</summary>
+              <div className="rating-breakdown">
+                {Object.entries(product.ratings.breakdown).reverse().map(([star, count]) => (
+                  <div key={star} className="rating-bar">
+                    <span className="star-label">{star}★</span>
+                    <div className="bar-container">
+                      <div
+                        className="bar-fill"
+                        style={{ width: `${(count / product.ratings.count) * 100}%` }}
+                      />
+                    </div>
+                    <span className="bar-count">{count}</span>
+                  </div>
+                ))}
+              </div>
+            </details>
+
+            {/* Customer Feedbacks - Collapsible */}
+            {product.feedbacks && product.feedbacks.length > 0 && (
+              <details className="customer-feedbacks-details">
+                <summary>Customer Reviews ({product.feedbacks.length})</summary>
+                <div className="customer-feedbacks">
+                  {product.feedbacks.slice(0, 3).map(feedback => (
+                    <div key={feedback.id} className="feedback-card">
+                      <div className="feedback-header">
+                        <div className="feedback-user">
+                          <span className="user-name">{feedback.user}</span>
+                          {feedback.verified && <span className="verified-badge">Verified</span>}
+                        </div>
+                        <div className="feedback-rating">
+                          {'★'.repeat(feedback.rating)}{'☆'.repeat(5 - feedback.rating)}
+                        </div>
+                      </div>
+                      <p className="feedback-comment">{feedback.comment}</p>
+                      <span className="feedback-date">{new Date(feedback.date).toLocaleDateString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            )}
+          </div>
         </div>
 
         <div className="product-info-page">
           <Link to="/shop" className="back-link">← {t('product.back')}</Link>
           <h1>{product.name}</h1>
-          <p className="product-price-large">${product.price.toFixed(2)}</p>
-          <p className="product-description">{product.description}</p>
 
-          <div className="quantity-selector">
-            <label>{t('product.quantity')}</label>
-            <div className="quantity-controls">
-              <button>-</button>
-              <span>1</span>
-              <button>+</button>
+          {/* Compact Ratings and Price Row */}
+          <div className="product-header-row">
+            <div className="rating-summary-compact">
+              <span className="rating-stars">★ {product.ratings.average}</span>
+              <span className="rating-count">({product.ratings.count} reviews)</span>
             </div>
+            <p className="product-price-large">${parseFloat(product.price).toFixed(2)}</p>
           </div>
 
-          <button className="add-to-cart-btn">{t('product.addToCart')}</button>
-          <button className="buy-now-btn">{t('product.buyNow')}</button>
+          <p className="product-description">{product.description}</p>
+
+          {/* Purchase Section - Priority Position */}
+          <div className="purchase-section">
+            <div className="quantity-selector">
+              <label>{t('product.quantity')}</label>
+              <div className="quantity-controls">
+                <button>-</button>
+                <span>1</span>
+                <button>+</button>
+              </div>
+            </div>
+
+            <button className="add-to-cart-btn">{t('product.addToCart')}</button>
+            <button className="buy-now-btn">{t('product.buyNow')}</button>
+          </div>
+
+          {/* Payment Methods - Compact */}
+          <div className="payment-methods-compact">
+            <span className="payment-label">Payment:</span>
+            <div className="payment-icons">
+              {product.paymentMode.includes('cash_on_delivery') && (
+                <span className="payment-badge cash">Cash on Delivery</span>
+              )}
+              {product.paymentMode.includes('online_payment') && (
+                <span className="payment-badge online">Online Payment</span>
+              )}
+            </div>
+            {product.paymentMode.length === 1 && product.paymentMode[0] === 'online_payment' && (
+              <p className="payment-note">Online payment only</p>
+            )}
+          </div>
+
+          {/* Occasions Tags - Compact */}
+          <div className="product-occasions-compact">
+            <span className="occasions-label">Perfect for:</span>
+            <div className="occasions-tags">
+              {product.occasions.map(occasion => (
+                <Link
+                  key={occasion}
+                  to={`/shop/${occasion}`}
+                  className="occasion-tag"
+                >
+                  {occasion.replace('-', ' ')}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

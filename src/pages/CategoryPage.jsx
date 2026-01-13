@@ -3,6 +3,7 @@ import { Link, useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useCart } from '../context/CartContext'
 import { useFavorites } from '../context/FavoritesContext'
+import { fetchProductsByOccasion } from '../services/api'
 import '../styles/CategoryPage.css'
 
 // Occasion configurations with theme colors
@@ -167,6 +168,7 @@ function CategoryPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
   const [forKids, setForKids] = useState(false)
+  const [localCategory, setLocalCategory] = useState('all')
   
   // Carousel state
   const [carouselIndex, setCarouselIndex] = useState(0)
@@ -177,9 +179,29 @@ function CategoryPage() {
   const carouselRef = useRef(null)
   const autoPlayRef = useRef(null)
 
-  const activeCategory = searchParams.get('category') || 'all'
+  const activeCategory = localCategory
   const config = occasionConfig[occasionId] || occasionConfig['other']
-  const products = allProducts[occasionId] || allProducts['other']
+  
+  // Products state from API
+  const [products, setProducts] = useState([])
+  const [productsLoading, setProductsLoading] = useState(true)
+
+  // Load products from API
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setProductsLoading(true)
+        const data = await fetchProductsByOccasion(occasionId)
+        setProducts(data)
+      } catch (err) {
+        console.error('Failed to load products:', err)
+        setProducts([])
+      } finally {
+        setProductsLoading(false)
+      }
+    }
+    loadProducts()
+  }, [occasionId])
 
   // Filter products - MUST be defined before hooks that use it
   const filteredProducts = useMemo(() => {
@@ -187,15 +209,20 @@ function CategoryPage() {
 
     // Filter by gender
     if (activeCategory === 'him') {
-      result = result.filter(p => p.forHim)
+      result = result.filter(p => p.gender === 'man' || p.gender === 'both')
     } else if (activeCategory === 'her') {
-      result = result.filter(p => p.forHer)
+      result = result.filter(p => p.gender === 'woman' || p.gender === 'both')
     }
 
     // Filter by price
     if (priceRange !== 'all') {
       const [min, max] = priceRange.split('-').map(Number)
       result = result.filter(p => p.price >= min && (max ? p.price <= max : true))
+    }
+
+    // Filter by kids
+    if (forKids) {
+      result = result.filter(p => p.kids === true)
     }
 
     // Sort
@@ -218,13 +245,13 @@ function CategoryPage() {
     }
 
     return result
-  }, [products, activeCategory, priceRange, sortBy])
+  }, [products, activeCategory, priceRange, sortBy, forKids])
 
   useEffect(() => {
     setIsLoading(true)
     const timer = setTimeout(() => setIsLoading(false), 600)
     return () => clearTimeout(timer)
-  }, [occasionId, activeCategory])
+  }, [occasionId])
 
   // Carousel auto-play
   useEffect(() => {
@@ -301,11 +328,7 @@ function CategoryPage() {
   }, [viewMode, prevSlide, nextSlide])
 
   const handleCategoryChange = (category) => {
-    if (category === 'all') {
-      setSearchParams({})
-    } else {
-      setSearchParams({ category })
-    }
+    setLocalCategory(category)
   }
 
   const getThemeClass = () => {
@@ -448,16 +471,18 @@ function CategoryPage() {
             >
               <span>{t('shop.filters.forHer')}</span>
             </button>
-            <button
-              className={`tab-btn tab-kids ${forKids ? 'active' : ''}`}
-              onClick={() => setForKids(!forKids)}
-              style={forKids ? { background: 'linear-gradient(135deg, #FFD93D, #FF6B6B)', color: '#1a1a2e' } : {}}
-            >
-              <span>{t('shop.filters.kids')}</span>
-            </button>
+            {occasionId === 'birthday' && (
+              <button
+                className={`tab-btn tab-kids ${forKids ? 'active' : ''}`}
+                onClick={() => setForKids(!forKids)}
+                style={forKids ? { background: 'linear-gradient(135deg, #FFD93D, #FF6B6B)', color: '#1a1a2e' } : {}}
+              >
+                <span>{t('shop.filters.kids')}</span>
+              </button>
+            )}
           </div>
           {/* Mobile Kids combo indicator */}
-          {forKids && activeCategory !== 'all' && (
+          {occasionId === 'birthday' && forKids && activeCategory !== 'all' && (
             <div className="mobile-kids-combo">
               {activeCategory === 'him' ? t('shop.filters.youngBoy') : t('shop.filters.youngGirl')}
             </div>
@@ -506,7 +531,7 @@ function CategoryPage() {
                 key={product.id}
                 className="mobile-premium-card"
                 style={{ '--i': index }}
-                onClick={() => navigate(`/product/${product.id.replace(/[a-z]/g, '')}`)}
+                onClick={() => navigate(`/product/${product.id}`)}
               >
                 <div className="premium-card-image">
                   <img src={product.image} alt={product.name} />
@@ -532,15 +557,15 @@ function CategoryPage() {
 
                   <div className="premium-card-rating">
                     <span className="rating-star">★</span>
-                    <span>{product.rating}</span>
-                    <span className="rating-count">({product.reviews})</span>
+                    <span>{product.ratings?.average ?? 0}</span>
+                    <span className="rating-count">({product.ratings?.count ?? 0})</span>
                   </div>
                 </div>
 
                 <div className="premium-card-content">
                   <div className="card-content-main">
                     <h3 className="premium-card-name">{product.name}</h3>
-                    <p className="premium-card-price">{product.price.toFixed(2)} MAD</p>
+                    <p className="premium-card-price">{parseFloat(product.price).toFixed(2)} MAD</p>
                   </div>
 
                   <button
@@ -618,19 +643,21 @@ function CategoryPage() {
               <span className="ribbon ribbon-right"></span>
             </button>
             
-            {/* Kids Toggle */}
-            <button
-              className={`gender-btn for-kids ${forKids ? 'active' : ''}`}
-              onClick={() => setForKids(!forKids)}
-            >
-              <span className="ribbon ribbon-left"></span>
-              <span className="btn-text">{t('shop.filters.kids')}</span>
-              <span className="ribbon ribbon-right"></span>
-            </button>
+            {/* Kids Toggle - Only for Birthday */}
+            {occasionId === 'birthday' && (
+              <button
+                className={`gender-btn for-kids ${forKids ? 'active' : ''}`}
+                onClick={() => setForKids(!forKids)}
+              >
+                <span className="ribbon ribbon-left"></span>
+                <span className="btn-text">{t('shop.filters.kids')}</span>
+                <span className="ribbon ribbon-right"></span>
+              </button>
+            )}
           </div>
           
           {/* Kids combination indicator */}
-          {forKids && activeCategory !== 'all' && (
+          {occasionId === 'birthday' && forKids && activeCategory !== 'all' && (
             <div className="kids-combo-label">
               {activeCategory === 'him' ? t('shop.filters.youngBoy') : t('shop.filters.youngGirl')}
             </div>
@@ -765,9 +792,9 @@ function CategoryPage() {
                         '--accent': config.accent
                       }}
                     >
-                      <div 
+                      <div
                         className="carousel-card"
-                        onClick={() => isActive && navigate(`/product/${product.id.replace(/[a-z]/g, '')}`)}
+                        onClick={() => isActive && navigate(`/product/${product.id}`)}
                       >
                         {/* Card Image Section */}
                         <div className="carousel-card-image">
@@ -798,17 +825,17 @@ function CategoryPage() {
                           <div className="carousel-card-rating">
                             <span className="rating-stars">
                               {[...Array(5)].map((_, i) => (
-                                <span key={i} className={i < Math.floor(product.rating) ? 'filled' : ''}>★</span>
+                                <span key={i} className={i < Math.floor(product.ratings?.average ?? 0) ? 'filled' : ''}>★</span>
                               ))}
                             </span>
-                            <span className="rating-value">{product.rating}</span>
-                            <span className="rating-reviews">({product.reviews} reviews)</span>
+                            <span className="rating-value">{product.ratings?.average ?? 0}</span>
+                            <span className="rating-reviews">({product.ratings?.count ?? 0} reviews)</span>
                           </div>
                           
                           <h3 className="carousel-card-name">{product.name}</h3>
                           
                           <div className="carousel-card-footer">
-                            <span className="carousel-card-price">{product.price.toFixed(2)} MAD</span>
+                            <span className="carousel-card-price">{parseFloat(product.price).toFixed(2)} MAD</span>
                             <button
                               className={`carousel-add-btn ${isInCart(product.id) ? 'in-cart' : ''}`}
                               onClick={(e) => {
@@ -916,7 +943,7 @@ function CategoryPage() {
                   key={product.id}
                   className="product-card"
                   style={{ '--card-index': index }}
-                  onClick={() => navigate(`/product/${product.id.replace(/[a-z]/g, '')}`)}
+                  onClick={() => navigate(`/product/${product.id}`)}
                 >
                   <div className="product-inner">
                     {product.badge && (
@@ -945,14 +972,14 @@ function CategoryPage() {
                       <div className="product-rating">
                         <div className="stars">
                           {[...Array(5)].map((_, i) => (
-                            <span key={i} className={`star ${i < Math.floor(product.rating) ? 'filled' : ''}`}>★</span>
+                            <span key={i} className={`star ${i < Math.floor(product.ratings?.average ?? 0) ? 'filled' : ''}`}>★</span>
                           ))}
                         </div>
-                        <span className="rating-text">{product.rating} ({product.reviews})</span>
+                        <span className="rating-text">{product.ratings?.average ?? 0} ({product.ratings?.count ?? 0})</span>
                       </div>
 
                       <div className="product-price-row">
-                        <span className="product-price">{product.price.toFixed(2)} MAD</span>
+                        <span className="product-price">{parseFloat(product.price).toFixed(2)} MAD</span>
                         <button
                           className={`add-to-cart ${isInCart(product.id) ? 'in-cart' : ''}`}
                           onClick={(e) => {

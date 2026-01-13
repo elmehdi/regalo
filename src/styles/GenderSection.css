@@ -2,6 +2,31 @@
   position: relative;
   width: 100%;
   padding: clamp(2.8rem, 5vw, 4.5rem) 0;
+  overflow: hidden;
+}
+
+/* Animated background gradient */
+.gender-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(201, 168, 108, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(201, 168, 108, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  animation: pulseGlow 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .gender-section__inner {
@@ -138,7 +163,9 @@
 
 .gender-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.35);
+  box-shadow: 
+    0 22px 70px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(201, 168, 108, 0.15);
 }
 
 .gender-card:hover .gender-card__bg {
@@ -147,12 +174,18 @@
 
 .gender-card:hover .gender-card__cta {
   background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(201, 168, 108, 0.4);
   transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(201, 168, 108, 0.2);
 }
 
 .gender-card:hover .gender-card__arrow {
   transform: translateX(3px);
+}
+
+.gender-card:hover .gender-card__fg {
+  transform: translateY(0) scale(1.02);
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
 }
 
 @media (max-width: 900px) {
